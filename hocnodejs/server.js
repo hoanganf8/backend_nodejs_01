@@ -3,11 +3,8 @@
 
 const http = require("http"); //Hỗ trợ giao thức http
 
-const fs = require("fs"); //Xử lý file
-
+// const fs = require("fs"); //Xử lý file
 const home = require("./modules/home");
-
-// console.log(home.index());
 
 const hostname = "localhost"; //Địa chỉ ip của server, hoặc hostname
 //Mặc định trên máy tính cá nhân là: 127.0.01

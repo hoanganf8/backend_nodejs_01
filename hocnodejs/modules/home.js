@@ -1,11 +1,22 @@
-const fs = require("fs"); //Xử lý file
-class Home {
+const Base = require("../core/Base");
+
+class Home extends Base {
+  //action
   index = (req, res) => {
     //Xử lý logic
 
-    fs.readFile("./views/home.html", "utf8", (err, data) => {
-      res.end(data); //Response Message Body
-    });
+    const title = "F8 - Fullstack";
+    const content = "Tôi là Hoàng An";
+
+    const products = `
+    <ul>
+      <li>Sản phẩm 1</li>
+      <li>Sản phẩm 2</li>
+      <li>Sản phẩm 3</li>
+    </ul>
+    `;
+
+    this.render(req, res, "home", { title, content, products }); //load view
   };
 }
 
