@@ -1,0 +1,12 @@
+body {
+  color: red;
+}
+
+p {
+  color: green;
+}
+
+button {
+  background: green;
+  color: #fff;
+}
