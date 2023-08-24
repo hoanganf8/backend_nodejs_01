@@ -55,3 +55,76 @@ Bài tập:
 - Thêm 3 bản ghi cho bảng products
 
 - Hiển thị danh sách các sản phẩm
+
+Bài tập:
+
+users, posts, group
+
+Thực hiện thêm dữ liệu cho 3 bảng
+
+Database Relationship
+
+1. One To One
+
+Quan hệ 1-1
+
+Ví dụ: 1 user có 1 số điện thoại
+
+Bài tập: tạo bảng phones
+
+- id
+- phone
+
+2. One to Many
+
+Quan hệ 1 - N
+
+Ví dụ: 1 nhóm có nhiều người dùng
+
+3. Many To Many
+
+Quan hệ N - N
+
+Ví dụ: posts và categories
+
+- 1 bài viết thuộc nhiều chuyên mục
+- 1 chuyên mục có nhiều bài viết
+
+=> Để thiết kế ra quan hệ này => Cần có bảng trung gian
+
+4. Quan hệ đa hình: Polymorephic
+
+Ví dụ:
+
+Review sản phẩm:
+Table products
+Table review_products
+
+Review bài viết
+Table posts
+Table review_posts
+
+Sử dụng polymorephic để xây dựng
+
+products:
+
+- id
+- name
+- created_at
+- updated_at
+
+posts:
+
+- id
+- title
+- content
+- created_at
+- updated_ats
+
+comments:
+
+- id
+- subject
+- message
+- object_type
+- object_id
