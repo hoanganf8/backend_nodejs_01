@@ -1,11 +1,29 @@
 <h1>Danh sách khách hàng</h1>
-<table width="100%" border="1" cellspacing="0" cellpadding="0">
+<form action="" class="mb-2">
+  <div class="row">
+    <div class="col-3">
+      <select name="status" class="form-select">
+        <option value="all">Tất cả trạng thái</option>
+        <option value="active" <%= req.query.status === 'active' ? 'selected': ''; %>>Kích hoạt</option>
+        <option value="inactive" <%= req.query.status === 'inactive' ? 'selected': ''; %>>Chưa kích hoạt</option>
+      </select>
+    </div>
+    <div class="col-7">
+      <input type="search" name="keyword" class="form-control" placeholder="Từ khóa tìm kiếm..." value="<%= req.query.keyword %>">
+    </div>
+    <div class="col-2 d-grid">
+      <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+  </div>
+</form>
+<table class="table table-bordered">
   <thead>
     <tr>
       <th width="5%">STT</th>
       <th>Tên</th>
       <th>Email</th>
       <th width="10%">Trạng thái</th>
+      <th width="10%">Thời gian</th>
     </tr>
   </thead>
   <tbody>
@@ -16,9 +34,27 @@
       <td><%= customer.name %></td>
       <td><%= customer.email %></td>
       <td><%= customer.status === 1 ? 'Active': 'Inactive' %></td>
+      <td><%= moment(customer.created_at).format('DD/MM/YYYY hh:mm:ss') %></td>
     </tr>
     <%
     }) %>
 
   </tbody>
 </table>
+<% if (totalPage > 1) { %>
+<nav class="d-flex justify-content-end">
+  <ul class="pagination">
+    <% if (page > 1) { %>
+    <li class="page-item"><a class="page-link" href="?page=<%= +page - 1 %>">Trước</a></li>
+    <% } %>
+
+    <% for (let i = 1; i <= totalPage; i++) { %>
+    <li class="page-item <%= +page === +i ? 'active': '' %>"><a class="page-link" href="?<%= getPaginateUrl(req, i) %>"><%= i %></a></li>
+    <% } %>
+
+    <% if (page < totalPage) { %>
+    <li class="page-item"><a class="page-link" href="?page=<%= +page + 1 %>">Sau</a></li>
+    <% } %>
+  </ul>
+</nav>
+<% } %>

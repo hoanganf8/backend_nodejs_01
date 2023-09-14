@@ -26,6 +26,14 @@ const Customer = async () => {
       status: {
         type: DataTypes.NUMBER,
       },
+
+      created_at: {
+        type: DataTypes.DATE,
+      },
+
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     },
     {
       timestamps: false,

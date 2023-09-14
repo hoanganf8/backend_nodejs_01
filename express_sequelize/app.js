@@ -18,8 +18,12 @@ var app = express();
 // console.log(db);
 
 // view engine setup
+
+const expressLayouts = require("express-ejs-layouts");
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(expressLayouts);
 
 app.use(logger("dev"));
 app.use(express.json());
