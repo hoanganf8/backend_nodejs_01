@@ -1,10 +1,13 @@
 const Customer = require("../models/Customer");
+const Province = require("../models/Province");
 const moment = require("moment");
 const { Op } = require("sequelize");
 const { PER_PAGE } = process.env;
-const { getPaginateUrl } = require("../utils/helper");
+const { getPaginateUrl } = require("../utils/url");
+const { query } = require("express-validator");
 
 module.exports = {
+  //Get lists
   index: async (req, res) => {
     const { keyword, status } = req.query;
 
@@ -68,5 +71,19 @@ module.exports = {
       page,
       getPaginateUrl,
     });
+  },
+
+  //Get Form
+  create: async (req, res) => {
+    const province = await Province;
+    const provinceList = await province.findAll();
+
+    res.render("customers/create", { provinceList });
+  },
+
+  //Post Create
+  store: async (req, res) => {
+    // console.log(query("name").isEmpty());
+    res.send("Submit");
   },
 };

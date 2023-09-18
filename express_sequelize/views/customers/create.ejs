@@ -1,0 +1,33 @@
+<h1>Thêm khách hàng</h1>
+<form action="" method="post">
+  <div class="mb-3">
+    <label for="">Tên</label>
+    <input type="text" name="name" placeholder="Tên..." class="form-control" />
+  </div>
+  <div class="mb-3">
+    <label for="">Email</label>
+    <input type="text" name="email" placeholder="Email..." class="form-control" />
+  </div>
+  <div class="mb-3">
+    <label for="">Mật khẩu</label>
+    <input type="password" name="password" placeholder="Mật khẩu..." class="form-control" />
+  </div>
+  <div class="mb-3">
+    <label for="">Trạng thái</label>
+    <select name="status" class="form-select">
+      <option value="0">Chưa kích hoạt</option>
+      <option value="1">Kích hoạt</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="">Tỉnh/Thành phố</label>
+    <select name="province" class="form-select">
+      <option value="0">Chọn Tỉnh/Thành phố</option>
+      <% provinceList.forEach(({id, name}) => { %>
+      <option value="<%= id %>"><%= name %></option>
+      <%}) %>
+    </select>
+  </div>
+  <button class="btn btn-success">Lưu</button>
+  <a href="/customers" class="btn btn-danger">Hủy</a>
+</form>
