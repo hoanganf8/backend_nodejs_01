@@ -4,8 +4,9 @@ const moment = require("moment");
 const { Op } = require("sequelize");
 const { PER_PAGE } = process.env;
 const { getPaginateUrl } = require("../utils/url");
-const { query } = require("express-validator");
-
+const { validationResult } = require("express-validator");
+const validate = require("../utils/validate");
+const md5 = require("md5");
 module.exports = {
   //Get lists
   index: async (req, res) => {
@@ -63,6 +64,8 @@ module.exports = {
       offset: offset,
     });
 
+    const msg = req.flash("msg");
+
     res.render("customers/index", {
       customerList,
       moment,
@@ -70,6 +73,7 @@ module.exports = {
       totalPage,
       page,
       getPaginateUrl,
+      msg,
     });
   },
 
@@ -77,13 +81,26 @@ module.exports = {
   create: async (req, res) => {
     const province = await Province;
     const provinceList = await province.findAll();
-
-    res.render("customers/create", { provinceList });
+    const msg = req.flash("msg");
+    const errors = req.flash("errors");
+    // console.log(validate.getError(errors, "name"));
+    res.render("customers/create", { provinceList, msg, errors, validate });
   },
 
   //Post Create
   store: async (req, res) => {
-    // console.log(query("name").isEmpty());
-    res.send("Submit");
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      //Thêm dữ liệu
+      const customer = await Customer;
+      req.body.password = md5(req.body.password);
+      customer.create(req.body);
+      req.flash("msg", "Thêm khách hàng thành công");
+      res.redirect("/customers");
+    } else {
+      req.flash("errors", errors.array());
+      req.flash("msg", "Vui lòng nhập đầy đủ thông tin");
+      res.redirect("/customers/create");
+    }
   },
 };

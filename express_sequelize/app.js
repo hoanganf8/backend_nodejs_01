@@ -6,19 +6,25 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var flash = require("connect-flash");
+var session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var customersRouter = require("./routes/customers");
 
 var app = express();
+app.use(
+  session({
+    secret: "F8",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
-//Connect database
-// const db = require("./utils/db");
-// console.log(db);
+app.use(flash());
 
 // view engine setup
-
 const expressLayouts = require("express-ejs-layouts");
 
 app.set("views", path.join(__dirname, "views"));

@@ -1,5 +1,8 @@
 <h1>Danh sách khách hàng</h1>
 <a href="/customers/create" class="btn btn-primary mb-2">Thêm mới</a>
+<% if (msg?.length) { %>
+<div class="alert alert-success"><%= msg %></div>
+<%  } %>
 <form action="" class="mb-2">
   <div class="row">
     <div class="col-3">
@@ -25,6 +28,8 @@
       <th>Email</th>
       <th width="10%">Trạng thái</th>
       <th width="10%">Thời gian</th>
+      <th width="5%">Sửa</th>
+      <th width="5%">Xóa</th>
     </tr>
   </thead>
   <tbody>
@@ -36,6 +41,12 @@
       <td><%= customer.email %></td>
       <td><%= customer.status === 1 ? 'Active': 'Inactive' %></td>
       <td><%= moment(customer.created_at).format('DD/MM/YYYY hh:mm:ss') %></td>
+      <td>
+        <a href="#" class="btn btn-warning btn-sm">Sửa</a>
+      </td>
+      <td>
+        <a href="#" class="btn btn-danger btn-sm">Xóa</a>
+      </td>
     </tr>
     <%
     }) %>
