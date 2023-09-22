@@ -7,6 +7,7 @@ const { getPaginateUrl } = require("../utils/url");
 const { validationResult } = require("express-validator");
 const validate = require("../utils/validate");
 const md5 = require("md5");
+const createError = require("http-errors");
 module.exports = {
   //Get lists
   index: async (req, res) => {
@@ -102,5 +103,77 @@ module.exports = {
       req.flash("msg", "Vui lòng nhập đầy đủ thông tin");
       res.redirect("/customers/create");
     }
+  },
+
+  edit: async (req, res, next) => {
+    const { id } = req.params;
+    const customer = await Customer;
+    const customerDetail = await customer.findByPk(id);
+    if (!customerDetail) {
+      //Xử lý lỗi
+      next(createError(404));
+      return;
+    }
+    const province = await Province;
+    const msg = req.flash("msg");
+    const errors = req.flash("errors");
+    const provinceList = await province.findAll();
+
+    res.render("customers/edit", {
+      msg,
+      errors,
+      validate,
+      provinceList,
+      customerDetail,
+    });
+  },
+
+  update: async (req, res) => {
+    const { id } = req.params;
+    const customer = await Customer;
+    const customerDetail = await customer.findByPk(id);
+
+    if (!customerDetail) {
+      //Xử lý lỗi
+      next(createError(404));
+      return;
+    }
+
+    //Xử lý update
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const customerData = req.body;
+      if (customerData.password) {
+        customerData.password = md5(customerData.password);
+      } else {
+        delete customerData.password;
+      }
+
+      await customer.update(customerData, {
+        where: {
+          id: id,
+        },
+      });
+
+      req.flash("msg", "Cập nhật thành công");
+    } else {
+      req.flash("errors", errors.array());
+      req.flash("msg", "Vui lòng nhập đầy đủ thông tin");
+    }
+
+    res.redirect("/customers/edit/" + id);
+  },
+
+  destroy: async (req, res) => {
+    const { id } = req.params;
+    const customer = await Customer;
+    await customer.destroy({
+      where: {
+        id: id,
+      },
+      force: false, //Xóa vĩnh viễn
+    });
+    req.flash("msg", "Xóa thành công");
+    res.redirect("/customers");
   },
 };

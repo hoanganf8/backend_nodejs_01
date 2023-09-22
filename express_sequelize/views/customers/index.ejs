@@ -42,10 +42,12 @@
       <td><%= customer.status === 1 ? 'Active': 'Inactive' %></td>
       <td><%= moment(customer.created_at).format('DD/MM/YYYY hh:mm:ss') %></td>
       <td>
-        <a href="#" class="btn btn-warning btn-sm">Sửa</a>
+        <a href="/customers/edit/<%= customer.id %>" class="btn btn-warning btn-sm">Sửa</a>
       </td>
       <td>
-        <a href="#" class="btn btn-danger btn-sm">Xóa</a>
+        <form action="/customers/destroy/<%= customer.id %>" onsubmit="return confirm('Bạn có chắc chắn?')" method="post">
+          <button class="btn btn-danger btn-sm" type="submit">Xóa</button>
+        </form>
       </td>
     </tr>
     <%
