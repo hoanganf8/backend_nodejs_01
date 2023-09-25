@@ -1,11 +1,14 @@
 {
+
   "development": {
     "username": "root",
     "password": "pveser@123",
     "database": "f8_backend_cli",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "port": "3306"
+    "port": "3306",
+    "logging": true,
+    "use_env": true
   },
   "test": {
     "username": "root",

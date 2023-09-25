@@ -26,7 +26,7 @@ Ví dụ:
 
 npx sequelize-cli model:generate --name Customer --attributes id:number,name:string
 
-## Chạy Migration
+## Chạy Migrate
 
 npx sequelize-cli db:migrate
 
