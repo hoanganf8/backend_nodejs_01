@@ -23,6 +23,7 @@
 <table class="table table-bordered">
   <thead>
     <tr>
+      <th><input type="checkbox" /></th>
       <th width="5%">STT</th>
       <th>Tên</th>
       <th>Email</th>
@@ -36,6 +37,7 @@
     <% customerList.forEach((customer, index) => {
         %>
     <tr>
+      <td><input type="checkbox" /></td>
       <td><%= index+1 %></td>
       <td><%= customer.name %></td>
       <td><%= customer.email %></td>
@@ -55,6 +57,7 @@
 
   </tbody>
 </table>
+<button class="btn btn-danger">Xóa đã chọn</button>
 <% if (totalPage > 1) { %>
 <nav class="d-flex justify-content-end">
   <ul class="pagination">

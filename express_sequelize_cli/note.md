@@ -57,3 +57,11 @@ Lưu ý: Tường minh
 ## Chạy Seeder
 
 npx sequelize-cli db:seed:all
+
+# Thông tin SMTP
+
+- HOST: smtp.gmail.com
+- Username: hoangan@fullstack.edu.vn
+- Password: xawy cdle xyzo cyio
+- Port: 465 hoặc 587
+- Secure: ssl hoặc tls -> ssl nếu port là 465, tls nếu port là 587
