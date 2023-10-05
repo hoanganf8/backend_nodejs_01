@@ -10,6 +10,11 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
+router.get("/open", function (req, res) {
+  fs.writeFileSync("data.txt", "ok");
+  res.sendFile(path.join(__dirname, "../public", "tracking.png"));
+});
+
 router.get("/send-mail", async (req, res) => {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
@@ -45,6 +50,12 @@ router.get("/send-mail", async (req, res) => {
   console.log(info);
 
   res.send("Test email");
+});
+
+router.get("/get-tracking", async (req, res) => {
+  const response = await fetch(`https://srdl4z-8001.csb.app/get-tracking`);
+  const data = await response.text();
+  res.send(data);
 });
 
 module.exports = router;
