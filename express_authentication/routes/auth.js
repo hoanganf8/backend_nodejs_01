@@ -26,4 +26,17 @@ router.post("/register", AuthController.handleRegister);
 
 router.get("/logout", AuthController.logout);
 
+router.get("/google/redirect", passport.authenticate("google"));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/auth/login",
+    failureMessage: true,
+  }),
+  (req, res) => {
+    res.redirect("/");
+  },
+);
+
 module.exports = router;

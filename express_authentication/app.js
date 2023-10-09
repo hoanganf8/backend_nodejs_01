@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -13,7 +15,7 @@ var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 
 const localPassport = require("./passport/localPassport");
-console.log(localPassport);
+const googlePassport = require("./passport/googlePassport");
 
 const expressLayouts = require("express-ejs-layouts");
 
@@ -23,7 +25,7 @@ app.use(
   session({
     secret: "f8",
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
   }),
 );
 
@@ -42,6 +44,7 @@ passport.deserializeUser(async function (id, done) {
 });
 
 passport.use("local", localPassport);
+passport.use("google", googlePassport);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
