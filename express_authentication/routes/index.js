@@ -9,8 +9,7 @@ const isLogout = (req, res, next) => {
 };
 /* GET home page. */
 router.get("/", isLogout, function (req, res, next) {
-  console.log(req.user);
-  res.render("index", { title: "Express" });
+  res.render("index", { title: "Express", user: req.user });
 });
 
 module.exports = router;
