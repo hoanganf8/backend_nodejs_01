@@ -1,0 +1,52 @@
+<h2>Cập nhật Role</h2>
+<form action="" method="post">
+  <div class="mb-3">
+    <select class="form-select" onchange="window.location.href='/roles/edit/'+this.value">
+      <% roles.forEach(({id, name}) => {%>
+      <option value="<%= id %>" <%= +id === +role.id ? 'selected':'' %>><%= name %></option>
+      <%}) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="">Tên</label>
+    <input type="text" name="name" placeholder="Tên Role..." class="form-control" value="<%= role.name %>" required />
+  </div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th width="20%">Module</th>
+        <th>Quyền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Quản lý User</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              <label>
+                <input type="checkbox" name="permission" value="users.read" <%= permissionUtil.get(permissions, "users.read") ? 'checked': '' %> /> Xem
+              </label>
+            </div>
+            <div class="col">
+              <label>
+                <input type="checkbox" name="permission" value="users.add" <%= permissionUtil.get(permissions, "users.add") ? 'checked': '' %> /> Thêm
+              </label>
+            </div>
+            <div class="col">
+              <label>
+                <input type="checkbox" name="permission" value="users.update" <%= permissionUtil.get(permissions, "users.update") ? 'checked': '' %> /> Sửa
+              </label>
+            </div>
+            <div class="col">
+              <label>
+                <input type="checkbox" name="permission" value="users.delete" <%= permissionUtil.get(permissions, "users.delete") ? 'checked': '' %> /> Xóa
+              </label>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+</form>
