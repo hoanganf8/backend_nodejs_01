@@ -13,7 +13,7 @@
       <% roles.forEach(({id, name}) => {  %>
       <tr>
         <td>
-          <input type="checkbox" name="roles" value="<%= id %>" />
+          <input type="checkbox" name="roles" value="<%= id %>" <%= isRole(user.Roles, id) ? 'checked': '' %> />
         </td>
         <td>
           <%= name %>

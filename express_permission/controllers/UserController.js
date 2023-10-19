@@ -1,6 +1,7 @@
 const model = require("../models/index");
 const User = model.User;
 const Role = model.Role;
+const { isRole } = require("../utils/permisson");
 
 module.exports = {
   index: async (req, res) => {
@@ -9,10 +10,19 @@ module.exports = {
   },
 
   permission: async (req, res) => {
+    const { id } = req.params;
     const roles = await Role.findAll();
+    const user = await User.findOne({
+      where: {
+        id,
+      },
+      include: {
+        model: Role,
+      },
+    });
 
     //Enhanced Literal Object
-    res.render("users/permission", { roles });
+    res.render("users/permission", { roles, user, isRole });
   },
 
   handlePermission: async (req, res) => {
