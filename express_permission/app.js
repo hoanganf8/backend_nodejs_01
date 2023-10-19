@@ -22,7 +22,7 @@ app.use(
   session({
     secret: "f8",
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
   }),
 );
 
@@ -34,7 +34,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async function (id, done) {
-  const user = await model.User.findByPk(id);
+  const user = await User.findByPk(id);
   done(null, user);
 });
 
