@@ -120,4 +120,21 @@ module.exports = {
 
     res.redirect("/roles/edit/" + id);
   },
+
+  delete: async (req, res) => {
+    //Lấy role cần xóa
+    const { id } = req.params;
+    //Lấy instance của role cần xóa
+    const role = await Role.findOne({ where: { id } });
+
+    //Xóa tất cả Permission liên quan đến Role cần xóa
+    await role.removePermissions(await Permission.findAll());
+
+    //Xóa Role
+    await Role.destroy({
+      where: { id },
+    });
+
+    res.redirect("/roles");
+  },
 };

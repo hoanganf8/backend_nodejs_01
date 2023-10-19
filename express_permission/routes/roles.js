@@ -10,4 +10,6 @@ router.post("/add", RoleController.handleAdd);
 router.get("/edit/:id", RoleController.edit);
 router.post("/edit/:id", RoleController.handleEdit);
 
+router.post("/delete/:id", RoleController.delete);
+
 module.exports = router;
