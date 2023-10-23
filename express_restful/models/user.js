@@ -15,13 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true,
       },
-      name: DataTypes.STRING(30),
-      email: DataTypes.STRING(100),
-      password: DataTypes.STRING(100),
-      provider_id: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
     },
     {
       sequelize,
