@@ -28,3 +28,6 @@ Giả sử tình huống:
 - Back-end đang thiết kế Database ở dạng underscore
 
 => Tạo ra 1 transformer để rename các field trong Database thành dạng camelCase
+
+Vấn đề CORS -> Trình duyệt chặn request nếu khác domain
+-> Phía server: Cho phép domain truy cập
