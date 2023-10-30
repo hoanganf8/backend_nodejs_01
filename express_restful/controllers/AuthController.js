@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+
 const model = require("../models/index");
+const jwt = require("../utils/jwt");
 const User = model.User;
 
 module.exports = {
@@ -27,20 +28,34 @@ module.exports = {
       });
       return;
     }
-    const { JWT_SECRET, JWT_EXPIRE } = process.env;
-    const token = jwt.sign(
+
+    //Tạo accessToken và refreshToken
+    const token = jwt.createToken({ userId: user.id });
+    const refreshToken = jwt.createRefresh();
+    //Lưu refreshToken vào Database
+    const updateStatus = await User.update(
       {
-        data: {
-          userId: user.id,
+        refresh_token: refreshToken,
+      },
+      {
+        where: {
+          id: user.id,
         },
       },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRE * 60 },
     );
+
+    if (!updateStatus) {
+      res.status(500).json({
+        status: "error",
+        message: "Server Error",
+      });
+      return;
+    }
 
     res.json({
       status: "success",
       accessToken: token,
+      refreshToken,
     });
   },
 
@@ -49,11 +64,16 @@ module.exports = {
     const authorization = req.headers["authorization"];
     const token = authorization.replace("Bearer", "").trim();
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
+      const decoded = jwt.decode(token);
 
       if (decoded) {
-        const { userId } = decoded.data;
-        const user = await User.findByPk(userId);
+        const { userId } = decoded;
+        const user = await User.findOne({
+          where: {
+            id: userId,
+          },
+          attributes: ["id", "name", "email", "createdAt", "updatedAt"],
+        });
         if (!user) {
           res.json({
             status: "error",
@@ -64,10 +84,96 @@ module.exports = {
         res.json({ status: "success", data: user });
       }
     } catch (e) {
+      console.log(e);
       res.status(401).json({
         status: "error",
         message: "Unauthorize",
       });
     }
   },
+
+  refreshToken: async (req, res) => {
+    //Nhận: refreshToken
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      res.status(400).json({
+        status: "error",
+        message: "refreshToken required",
+      });
+      return;
+    }
+
+    try {
+      jwt.decode(refreshToken);
+      //Verify với Database
+      const user = await User.findOne({
+        where: {
+          refresh_token: refreshToken,
+        },
+      });
+
+      //Nếu user không tồn tại -> Trả về thông báo lỗi
+      if (!user) {
+        res.status(401).json({
+          status: "error",
+          message: "Unauthorize",
+        });
+        return;
+      }
+      //Nếu user tồn tại -> Hợp lệ -> Tạo accessToken mới và refreshToken
+      const token = jwt.createToken({ userId: user.id });
+      const newRefreshToken = jwt.createRefresh();
+
+      //Lưu refreshToken vào Database
+      const updateStatus = await User.update(
+        {
+          refresh_token: refreshToken,
+        },
+        {
+          where: {
+            id: user.id,
+          },
+        },
+      );
+
+      if (!updateStatus) {
+        res.status(500).json({
+          status: "error",
+          message: "Server Error",
+        });
+        return;
+      }
+
+      res.json({
+        status: "success",
+        accessToken: token,
+        refreshToken: newRefreshToken,
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(401).json({
+        status: "error",
+        message: "Unauthorize",
+      });
+      return;
+    }
+
+    //Ra: accessToken mới và refreshToken mới
+  },
 };
+
+/*
+Khi accessToken hết hạn -> Gửi refreshToken lên Server -> Kiểm tra refeshToken hợp lệ
+- Vẫn sống
+- Tồn tại -> Decode ra userId -> userId khớp với Database
+- Kiểm tra refresh tồn tại trong bảng users
+
+Tình huống: khi accessToken được cấp lại -> refreshToken cũng được cấp lại -> Vẫn tồn tại refreshToken cũ hợp lệ
+
+Giải pháp: Khi 1 refresh được tạo -> Lưu lại refresh khớp 1 userId
+
+Khi tạo refresh mới -> xóa refresh cũ
+
+AccessToken: Lưu ở Client
+RefreshToken: Lưu ở Client và Server
+*/
