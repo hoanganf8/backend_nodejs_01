@@ -84,7 +84,6 @@ module.exports = {
         res.json({ status: "success", data: user });
       }
     } catch (e) {
-      console.log(e);
       res.status(401).json({
         status: "error",
         message: "Unauthorize",
@@ -150,7 +149,6 @@ module.exports = {
         refreshToken: newRefreshToken,
       });
     } catch (e) {
-      console.log(e);
       res.status(401).json({
         status: "error",
         message: "Unauthorize",
@@ -176,4 +174,16 @@ Khi tạo refresh mới -> xóa refresh cũ
 
 AccessToken: Lưu ở Client
 RefreshToken: Lưu ở Client và Server
+
+Xử lý logout
+
+Khi user logout 
+-> Thêm accessToken vào Table Blacklist
+-> Xóa refreshToken khỏi Database
+
+Khi check authorization -> Kiểm tra token có nằm trong blacklist
+
+Trong table Blacklist -> Thêm field expired lưu thời gian hết hạn của token
+
+1 ngày -> Thêm tính trình chạy tự động để xóa các token đã hết hạn -> Tìm hiểu cronjob
 */
