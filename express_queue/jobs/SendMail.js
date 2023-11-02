@@ -1,7 +1,8 @@
 const nodemailer = require("nodemailer");
 class SendMail {
-  constructor(job) {
-    this.job = job;
+  constructor(data) {
+    this.data = data;
+    this.tries = 3;
   }
 
   handle = async () => {
@@ -17,10 +18,11 @@ class SendMail {
     });
     const info = await transporter.sendMail({
       from: `Hoàng An F8 <hoangan@fullstack.edu.vn>`, // sender address
-      to: this.job.email, // list of receivers
-      subject: `Xin chào: ${job.name}`, // Subject line
-      html: `Xin chào bạn ${job.name}, tôi đang test email`,
+      to: this.data.email, // list of receivers
+      subject: `Xin chào: ${this.data.name}`, // Subject line
+      html: `Xin chào bạn ${this.data.name}, tôi đang test email`,
     });
+    console.log("Send Email Success");
   };
 }
 

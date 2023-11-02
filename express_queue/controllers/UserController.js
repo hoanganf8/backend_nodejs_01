@@ -7,7 +7,9 @@ module.exports = {
 
   handleLogin: async (req, res) => {
     const { email, name } = req.body;
-    new Event(
+    //Dispatch Queue
+    const event = new Event();
+    event.dispatch(
       new SendMail({
         name,
         email,

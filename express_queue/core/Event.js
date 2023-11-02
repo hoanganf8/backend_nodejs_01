@@ -7,21 +7,29 @@ const { v4: uuid } = require("uuid");
 const model = require("../models/index");
 const QueueJob = model.QueueJob;
 class Event {
-  constructor(job) {
-    this.job = job;
-    this.store();
+  constructor() {
+    this.data = null;
   }
+
+  dispatch = (instance) => {
+    this.data = instance;
+    this.store();
+  };
 
   store = async () => {
     //Lưu thông tin vào database
-    const job = await QueueJob.create({
+    const data = await QueueJob.create({
       key: uuid(),
       value: JSON.stringify({
-        data: this.job,
-        name: this.job.constructor.name,
+        data: this.data.data,
+        name: this.data.constructor.name,
       }),
     });
-    console.log(job);
+    if (data) {
+      console.log(`Add queue success`);
+      return;
+    }
+    console.log("Add queue failed");
   };
 }
 
