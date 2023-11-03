@@ -6,12 +6,14 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
+var cron = require("node-cron");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
 const authApiKeyMiddleware = require("./middlewares/authApiKeyMiddleware");
 
+const blacklist = require("./utils/blacklist");
 var app = express();
 
 app.use(cors());
@@ -47,6 +49,11 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.json({ error: "Không tìm thấy" });
+});
+
+//Xử lý dọn dẹp token
+cron.schedule("* 0 * * *", () => {
+  blacklist.remove();
 });
 
 module.exports = app;

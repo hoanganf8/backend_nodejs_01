@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const model = require("../models/index");
 const jwt = require("../utils/jwt");
 const User = model.User;
+const Blacklist = model.Blacklist;
 
 module.exports = {
   login: async (req, res) => {
@@ -60,11 +61,23 @@ module.exports = {
   },
 
   profile: async (req, res) => {
-    const { JWT_SECRET } = process.env;
     const authorization = req.headers["authorization"];
     const token = authorization.replace("Bearer", "").trim();
     try {
       const decoded = jwt.decode(token);
+      //Kiểm tra blacklist
+      const blacklist = await Blacklist.findOne({
+        where: {
+          token,
+        },
+      });
+      if (blacklist) {
+        res.json({
+          status: "error",
+          message: "Unauthorize",
+        });
+        return;
+      }
 
       if (decoded) {
         const { userId } = decoded;
@@ -81,6 +94,7 @@ module.exports = {
           });
           return;
         }
+
         res.json({ status: "success", data: user });
       }
     } catch (e) {
@@ -157,6 +171,36 @@ module.exports = {
     }
 
     //Ra: accessToken mới và refreshToken mới
+  },
+
+  logout: async (req, res) => {
+    const { accessToken } = req.body;
+    try {
+      const decoded = jwt.decode(accessToken);
+
+      if (decoded) {
+        await Blacklist.create({
+          token: accessToken,
+        });
+        await User.update(
+          {
+            refresh_token: null,
+          },
+          {
+            where: {
+              id: decoded.userId,
+            },
+          },
+        );
+        res.json({ status: "success" });
+        return;
+      }
+    } catch (e) {
+      res.status(401).json({
+        status: "error",
+        message: "Unauthorize",
+      });
+    }
   },
 };
 
