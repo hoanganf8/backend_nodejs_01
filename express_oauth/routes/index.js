@@ -5,10 +5,10 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  const token = md5(new Date().getTime() + Math.random());
-  const token2 = sha1(new Date().getTime() + Math.random());
-  res.send(`${token} - ${token2}`);
-  // res.render("index", { title: "Express" });
+  // const token = md5(new Date().getTime() + Math.random());
+  // const token2 = sha1(new Date().getTime() + Math.random());
+  // res.send(`${token} - ${token2}`);
+  res.render("index", { user: req.user });
 });
 
 module.exports = router;

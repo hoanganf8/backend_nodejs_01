@@ -1,5 +1,6 @@
 module.exports = {
   login: (req, res) => {
-    res.render("auth/login");
+    const { redirect } = req.query;
+    res.render("auth/login", { redirect });
   },
 };
