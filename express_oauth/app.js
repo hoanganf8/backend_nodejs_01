@@ -33,7 +33,6 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async function (id, done) {
-  console.log("1");
   const user = await model.User.findByPk(id);
   done(null, user);
 });
@@ -53,7 +52,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
-app.use(authMiddleware);
+// app.use(authMiddleware);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
