@@ -1,0 +1,30 @@
+<div class="row justify-content-center">
+  <div class="col-6">
+    <h2>Đăng ký</h2>
+    <form action="" method="post">
+      <div class="mb-3">
+        <label for="">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          placeholder="Email..."
+        />
+      </div>
+      <div class="mb-3">
+        <label for="">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          placeholder="Email..."
+        />
+      </div>
+      <div class="d-grid">
+        <button class="btn btn-primary">Đăng ký</button>
+      </div>
+      <input type="hidden" name="_token" value="<%= csrf.token() %>" />
+      <input type="hidden" name="_method" value="DELETE" />
+    </form>
+  </div>
+</div>

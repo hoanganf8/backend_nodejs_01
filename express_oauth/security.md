@@ -46,8 +46,43 @@
 
 Cách xử lý: Tạo csrf token
 
+GET /active?courseId=1&token=abc --> Token phải được generate từ trang danh sách
+
+Viết 2 middleware
+
+- csrfToken
+- customMethod
+
 ## SQL Injection
+
+- Kỹ thuật tiêm đoạn mã xấu --> Gây ảnh hưởng tới Database
 
 ## HTML Injection
 
+- Sửa html bằng devtools --> submit form
+  ==> Giải pháp: Validate phía server
+
 ## Tắt Debug
+
+3 môi trường
+
+- dev
+- test
+- product
+
+## Sử dụng HTTPS
+
+## Không sử dụng các package cũ
+
+## Sử dụng Rate Limit
+
+## Brute Force
+
+- Dùng tool để dò password
+
+Giải pháp:
+
+- Dùng captcha (Nên dùng recapcha v3)
+- 2FA --> Xác minh 2 bước
+- Rate Limit
+- Khóa tài khoản khi đăng nhập sai (Quá 5 lần)

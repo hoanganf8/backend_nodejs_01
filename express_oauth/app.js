@@ -7,8 +7,11 @@ var logger = require("morgan");
 var expressLayouts = require("express-ejs-layouts");
 var passport = require("passport");
 var session = require("express-session");
+var methodOverride = require("method-override");
 var localPassport = require("./passport/localPassport");
 var authMiddleware = require("./middlewares/auth.middleware");
+const csrf = require("./middlewares/csrf.middleware");
+var helmet = require("helmet");
 
 var model = require("./models/index");
 
@@ -16,7 +19,8 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
-
+app.use(helmet());
+app.disable("x-powered-by");
 app.use(
   session({
     secret: "f8",
@@ -50,6 +54,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  methodOverride(function (req, res) {
+    if (req.body && typeof req.body === "object" && "_method" in req.body) {
+      // look in urlencoded POST bodies and delete it
+      var method = req.body._method;
+      delete req.body._method;
+      return method;
+    }
+  }),
+);
+
+app.use(csrf.verify);
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
 // app.use(authMiddleware);

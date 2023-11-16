@@ -34,4 +34,7 @@ router.post("/logout", (req, res, next) => {
   });
 });
 
+router.get("/register", authController.register);
+router.delete("/register", authController.handleRegister);
+
 module.exports = router;
